@@ -22,7 +22,7 @@ class FileUploadController extends Controller
     public function saveFile( Request $request ) {
         
         $request->validate([
-            'file' => 'required|mimes:pdf,xml,doc,csv,txt|max:2048',
+            'file' => 'required|mimes:pdf,xml,doc,csv,txt|max:10000',
         ]);
  
         $fileName = $request->file->getClientOriginalName();
@@ -32,6 +32,7 @@ class FileUploadController extends Controller
         $path = Storage::disk('s3')->put( $filePath, file_get_contents( $request->file ) );
         $path = Storage::disk('s3')->url( $path );
 
+        //Save data to database
         $data = array(
             'filename' => $fileName,
             's3_path' => $filePath,
@@ -41,8 +42,6 @@ class FileUploadController extends Controller
 
         //send email notification after file upload
         $this->sendMail( $data );
-        
-        // Perform the database operation here
  
         return back()->with('success','File has been successfully uploaded.');
     }
