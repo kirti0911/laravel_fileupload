@@ -21,7 +21,7 @@ class FileUploadController extends Controller
     public function saveFile( Request $request ) {
         
         $request->validate([
-            'file' => 'required|mimes:pdf,xml,doc,csv,txt|max:2048',
+            'file' => 'required|mimes:pdf,xml,doc,csv,txt|max:10000',
         ]);
  
         $fileName = $request->file->getClientOriginalName();
