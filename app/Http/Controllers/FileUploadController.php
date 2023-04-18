@@ -31,14 +31,13 @@ class FileUploadController extends Controller
         $path = Storage::disk('s3')->put( $filePath, file_get_contents( $request->file ) );
         $path = Storage::disk('s3')->url( $path );
 
+        //Save data to database
         $data = array(
             'filename' => $fileName,
             's3_path' => $filePath,
             'size' => $size
         );
         $insert = upload::saveFile( $data );
-        
-        // Perform the database operation here
  
         return back()->with('success','File has been successfully uploaded.');
     }
