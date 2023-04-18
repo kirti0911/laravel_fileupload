@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\upload;
+use Mail;
 
 class FileUploadController extends Controller
 {
@@ -37,9 +38,26 @@ class FileUploadController extends Controller
             'size' => $size
         );
         $insert = upload::saveFile( $data );
+
+        //send email notification after file upload
+        $this->sendMail( $data );
         
         // Perform the database operation here
  
         return back()->with('success','File has been successfully uploaded.');
+    }
+
+    public function sendMail( $data ) {
+        
+        $to_name = 'Admin';
+        $to_email = 'notify@test.test';
+        
+        Mail::send('file_upload_mail', $data, function($message) use ($to_name, $to_email) {
+        $message->to($to_email, $to_name)
+        ->subject('File upload notification');
+        $message->from('admin@test.com');
+        });
+        
+        return 'Email sent Successfully';
     }
 }
