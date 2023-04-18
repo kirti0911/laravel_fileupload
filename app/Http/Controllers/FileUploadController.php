@@ -28,8 +28,8 @@ class FileUploadController extends Controller
         $filePath = 'uploads/' . $fileName;
         $size = $request->file->getSize();
  
-       // $path = Storage::disk('s3')->put( $filePath, file_get_contents( $request->file ) );
-       // $path = Storage::disk('s3')->url( $path );
+        $path = Storage::disk('s3')->put( $filePath, file_get_contents( $request->file ) );
+        $path = Storage::disk('s3')->url( $path );
 
         $data = array(
             'filename' => $fileName,
